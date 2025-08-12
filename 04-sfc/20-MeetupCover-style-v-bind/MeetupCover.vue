@@ -11,7 +11,8 @@ const props = defineProps({
   },
 })
 
-const bgStyle = computed(() => (props.image ? { '--bg-url': `url('${props.image}')` } : undefined))
+// const bgStyle = computed(() => (props.image ? { '--bg-url': `url('${props.image}')` } : undefined))
+const bgUrl = computed(() => (props.image ? `url(${props.image})` : 'var(--default-cover)'))
 </script>
 
 <template>
@@ -25,8 +26,8 @@ const bgStyle = computed(() => (props.image ? { '--bg-url': `url('${props.image}
   background-size: cover;
   background-position: center;
   /* Если изображение присутствует - берём его из CSS переменной, установленной на элемент в шаблоне */
-  /* Иначе выводим изображение по умолчанию - var(--default-cover) */
-  background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), var(--bg-url, var(--default-cover));
+  /* Иначе выводим изображение по умолчанию - var(--default-cover): var(--bg-url, var(--default-cover)) */
+  background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), v-bind(bgUrl);
   display: flex;
   flex-direction: column;
   align-items: center;
