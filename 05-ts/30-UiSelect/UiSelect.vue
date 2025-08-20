@@ -1,4 +1,12 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+
+defineProps<{
+  modelValue: string
+  options: string[]
+  text: string
+  value: string
+}>()
+</script>
 
 <template>
   <select class="select">
