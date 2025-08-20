@@ -4,7 +4,7 @@ import { ref } from 'vue'
 import MeetupsAuthForm from '../components/MeetupsAuthForm.vue'
 import LayoutAuth from '../components/LayoutAuth.vue'
 import { login } from '../api.ts'
-import { useRoute, useRouter, } from 'vue-router'
+import { useRoute, useRouter,  type RouteLocationNormalizedLoadedGeneric,  type RouteRecordNameGeneric} from 'vue-router'
 // type LocationQueryValue, type RouteLocationAsRelativeTyped, type RouteLocationResolvedGeneric, type RouteLocationNormalizedLoaded,  type RouteRecordNameGeneric
 
 const email = ref('demo@email')
@@ -14,33 +14,33 @@ const router = useRouter();
 const route = useRoute();
 
 // Вариант решения проблемы с Typescript
-// const getFromPath = (route: RouteLocationNormalizedLoaded): string | null => {
-//   const from = route.query?.from
-//   if (typeof from === 'string') return from
-//   if (Array.isArray(from) && from.length > 0) return from[0] as string
-//   return null
-// }
+const getFromPath = (route: RouteLocationNormalizedLoadedGeneric): string | null => {
+  const from = route.query?.from
+  if (typeof from === 'string') return from
+  if (Array.isArray(from) && from.length > 0) return from[0] as string
+  return null
+}
 
 async function onSubmit() {
   try {
     await login(email.value, password.value)
     // Авторизация прошла успешно
     console.info('ROUTE : ', route)
-    if (route.query?.from && typeof route.query.from === 'string') {
-      router.push(route.query.from)
-    } else {
-      router.push('/')
-    }
-    // const from = getFromPath(route);
-    // if(from){
-    //   // const from = route.query.from as RouteRecordNameGeneric;
-    //   const name = router.resolve(from).name as RouteRecordNameGeneric;
-    //   // const name = resolved.name as RouteRecordNameGeneric
-    //   // console.info('RESOLVED : ', router.resolve(route.query?.from))
-    //   router.push({name})
+    // if (route.query?.from && typeof route.query.from === 'string') {
+    //   router.push(route.query.from)
     // } else {
-    //   router.push({name: 'index'})
+    //   router.push('/')
     // }
+    const from = getFromPath(route);
+    if(from){
+      // const from = route.query.from as RouteRecordNameGeneric;
+      const name = router.resolve(from).name as RouteRecordNameGeneric;
+      // const name = resolved.name as RouteRecordNameGeneric
+      // console.info('RESOLVED : ', router.resolve(route.query?.from))
+      router.push({name})
+    } else {
+      router.push({name: 'index'})
+    }
   } catch (error) {
     alert((error as Error).message)
   }
